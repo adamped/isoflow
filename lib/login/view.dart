@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import '../framework/view.dart';
 import '../framework/base.dart';
 import 'view.logic.dart' as logic;
-import '../services/navigation.dart' as navigation;
 
 class LoginView extends View<_LoginModel>{
   LoginView({Key key})
@@ -11,7 +10,7 @@ class LoginView extends View<_LoginModel>{
                 _LoginModel(username: '', isLoggingIn: false),
             update: update,
             view: view) {
-    logic.initialize(this);
+    logic.flow(this);
   }
 }
 

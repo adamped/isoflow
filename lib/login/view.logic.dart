@@ -3,13 +3,16 @@ import '../services/api.dart' as api;
 import '../services/navigation.dart' as navigation;
 import '../framework/base.dart';
 
-void initialize(LoginView loginView) {
+void flow(LoginView loginView) {
 
-  Flow(loginView, api.instance)
+  var apiService = api.instance;
+  var navService = navigation.instance;
+
+  Flow(loginView, apiService)
       .fromSource<LoginMessage>(loginPressed)
       .fromDestination<api.ApiResponseMessage>(loginApiResponse);
 
-  Flow(api.instance, navigation.instance)
+  Flow(apiService, navService)
       .fromSource<api.ApiResponseMessage>(navigateOnLogin);
 
 }
