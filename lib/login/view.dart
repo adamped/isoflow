@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import '../framework/view.dart';
 import '../framework/base.dart';
 import 'view.logic.dart' as logic;
+import '../services/navigation.dart' as navigation;
 
-class LoginView extends View<_LoginModel> {
+class LoginView extends View<_LoginModel>{
   LoginView({Key key})
       : super(
             initial:
@@ -21,7 +22,7 @@ class _LoginModel {
   final bool isLoggingIn;
 }
 
-_LoginModel update(BuildContext context, Message msg, _LoginModel model) {
+_LoginModel update(BuildContext context, Message msg, _LoginModel model) {  
   if (msg is LoginMessage)
     return _LoginModel(username: msg.username, isLoggingIn: true);
 

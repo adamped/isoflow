@@ -48,7 +48,6 @@ void connector(Request request) {
   });
 
   // This is just a sample
-  // More work to deal with POST, GET, PUT, DELETE etc would be needed
   // http.post(request.request).then((response) {
   //   request.callback(response);
   // });

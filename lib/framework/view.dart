@@ -6,15 +6,15 @@ typedef Model Update<Model>(BuildContext context, Message msg, Model model);
 typedef Widget BuildView<Model>(Model model, Send update);
 typedef Model Build<Model>();
 
-abstract class View<Model> extends StatefulWidget {
+abstract class View<Model> extends StatefulWidget with ConnectorMixin {
   View({Key key, this.initial, this.update, this.view}): super(key: key);
 
+  final InboundQueue input = InboundQueue();
   final StreamController<Message> output = StreamController<Message>();
   void dispose() =>  output.close();
   final Model initial;
   final Update<Model> update;
   final BuildView<Model> view;
-  final InboundQueue input = InboundQueue();
 
   @override
   _State createState() => _State<View, Model>(initial, update, view, output, input);

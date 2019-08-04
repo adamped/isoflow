@@ -1,6 +1,14 @@
 import 'dart:async';
 import 'dart:collection';
 
+mixin ConnectorMixin {
+  InboundQueue input;
+  StreamController<Message> output;
+  
+  void receive(Message message) => input.add(message);
+  void listen(Function(Message) process) => output.stream.listen(process);
+}
+
 abstract class Message {}
 typedef void Send(Message message);
 typedef Model Update<Model>(Model model, Message message);
@@ -8,7 +16,7 @@ typedef PlatformModel BuildView<Model, PlatformModel>(Model model, Send update);
 typedef void UpdateMessage(Message message);
 typedef void Process<PlatformModel>(PlatformModel model);
 
-abstract class Base<Model, PlatformModel> {
+abstract class Base<Model, PlatformModel> with ConnectorMixin {
   Base({Model initial, this.update, this.platform, this.connector})
   {
     input.onAdd((msg) { _process(msg); });
@@ -54,4 +62,28 @@ class InboundQueue {
   }
 
   void onAdd(UpdateMessage update) => _update = update;
+}
+
+class Flow {
+  Flow(this.source, this.destination);
+  final ConnectorMixin source;
+  final ConnectorMixin destination;
+
+  Flow fromSource<MessageType extends Message>(Message Function(MessageType) process) {
+    source.listen((msg) {
+      if (msg is MessageType)
+        destination.receive(process(msg));
+    });
+
+    return this;
+  }
+
+  Flow fromDestination<MessageType extends Message>(Message Function(MessageType) process) {
+    destination.listen((msg) {
+      if (msg is MessageType)
+        source.receive(process(msg));
+    });
+
+    return this;
+  }
 }

@@ -1,29 +1,27 @@
-import 'view.dart' as login;
+import 'view.dart';
 import '../services/api.dart' as api;
+import '../services/navigation.dart' as navigation;
+import '../framework/base.dart';
 
-void initialize(login.LoginView instance) {
+void initialize(LoginView loginView) {
 
-  // From LoginView
-  instance.output.stream.listen((msg) {
-    if (msg is login.LoginMessage) loginPressed(msg, api.instance);
-  });
+  Flow(loginView, api.instance)
+      .fromSource<LoginMessage>(loginPressed)
+      .fromDestination<api.ApiResponseMessage>(loginApiResponse);
 
-  // From Other Services
-  api.instance.output.stream.listen((msg) {
-    if (msg is api.ApiResponseMessage) loginResponseReceived(msg, instance);
-  });
+  Flow(api.instance, navigation.instance)
+      .fromSource<api.ApiResponseMessage>(navigateOnLogin);
+
 }
 
-void loginPressed(login.LoginMessage message, api.Api apiService) {
-  var msg = api.ApiPostMessage(body: message.username, url: '/oauth/login');
-
-  apiService.input.add(msg);
+api.ApiPostMessage loginPressed(LoginMessage message) {
+  return api.ApiPostMessage(body: message.username, url: '/oauth/login');
 }
 
-void loginResponseReceived(
-    api.ApiResponseMessage message, login.LoginView view) {
+LoginResult loginApiResponse(api.ApiResponseMessage message) {
+  return LoginResult(success: true);
+}
 
-  var msg = login.LoginResult(success: true);
-
-  view.input.add(msg);
+Message navigateOnLogin(api.ApiResponseMessage message) {
+  return navigation.LoginSuccess();
 }
