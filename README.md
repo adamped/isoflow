@@ -2,7 +2,7 @@
 
 An example Flutter application, using a modified MVU approach, with "Flows" to manage an app wide event based messaging system.
 
-It is an architecture of
+It is an architecture guided by:
 1) Everything is a service
 2) Everything is concurrent
 3) The async keyword doesn't exist in my world anymore :)
