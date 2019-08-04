@@ -1,16 +1,10 @@
 # isoflow_example
 
-A new Flutter project.
+An example Flutter application, using a modified MVU approach, with "Flows" to manage an app wide event based messaging system.
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+It is an architecture of
+1) Everything is a service
+2) Everything is concurrent
+3) The async keyword doesn't exist in my world anymore :)
+4) Inbound queue's turn concurrency into singular data flows
+5) Send outbound events to "Flows" for redirection
